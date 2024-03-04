@@ -1,3 +1,7 @@
 export default function appendToEachArrayValue(array, appendString) {
-  return array.map(value => appendString + value);
+  for (let idx in array) {
+    array[idx] = appendString + array[idx];
+  }
+
+  return array;
 }
