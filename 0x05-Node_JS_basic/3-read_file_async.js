@@ -1,40 +1,57 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 
-function countStudents(path) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf8', (error, data) => {
-            if (error) {
-                reject(new Error('Cannot load the database'));
-                return;
-            }
+async function countStudents(filepath) {
+	try {
+		const data = await fs.readFile(filepath, 'utf8');
+		const lines = data.trim().split('\n');
 
-            const lines = data.trim().split('\n').filter(line => line.trim() !== '');
-            
-            let totalStudents = 0;
-            const fieldCounts = {};
-            const fieldLists = {};
+		if (lines.length < 2) {
+			throw new Error("Cannot load the database");
+		}
 
-            lines.forEach(line => {
-                const [firstName, lastName, field, age] = line.split(',');
-                if (!fieldCounts[field]) {
-                    fieldCounts[field] = 1;
-                    fieldLists[field] = [`${firstName} (${age})`];
-                } else {
-                    fieldCounts[field]++;
-                    fieldLists[field].push(`${firstName} (${age})`);
-                }
-                totalStudents++;
-            });
+		const headers = lines.shift().split(',');
+		const firstNameIndex = headers.indexOf("firstname");
+		const fieldIndex = headers.indexOf("field");
 
-            console.log(`Number of students: ${totalStudents}`);
-            Object.entries(fieldCounts).forEach(([field, count]) => {
-                console.log(`Number of students in ${field}: ${count}. List: ${fieldLists[field].join(', ')}`);
-            });
+		if (firstNameIndex === -1 || fieldIndex === -1) {
+			throw new Error("Cannot load the database");
+		}
 
-            resolve();
-        });
-    });
+		const fieldCounts = {};
+		lines.forEach((line) => {
+			const studentData = line.split(',');
+			if (studentData.length !== headers.length) {
+				return;
+			}
+
+			const firstName = studentData[firstNameIndex].trim();
+			const field = studentData[fieldIndex].trim();
+
+			if (!firstName || !field) {
+				return;
+			}
+
+			if (!(field in fieldCounts)) {
+				fieldCounts[field] = {
+					count: 0,
+					names: []
+				};
+			}
+
+			fieldCounts[field].count += 1;
+			fieldCounts[field].names.push(firstName);
+		});
+
+		const totalStudents = Object.values(fieldCounts).reduce((sum, info) => sum + info.count, 0);
+		console.log(`Number of students: ${totalStudents}`);
+
+		for (const [field, info] of Object.entries(fieldCounts)) {
+			const namesList = info.names.join(", ");
+			console.log(`Number of students in ${field}: ${info.count}. List: ${namesList}`);
+		}
+	} catch (error) {
+		throw new Error("Cannot load the database");
+	}
 }
 
 module.exports = countStudents;
-
