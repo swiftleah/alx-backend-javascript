@@ -1,32 +1,57 @@
-const http = require('http');
-const countStudents = require('./3-read_file_async');
+const { createServer } = require('http');
+const { readFile } = require('fs');
 
-const app = http.createServer((req, res) => {
-    res.setHeader('Content-Type', 'text/plain');
+function writeStudents(path) {
+  return new Promise((resolve, reject) => {
+    readFile(path, 'utf-8', ((err, data) => {
+      if (err) {
+        const error = new Error('Cannot load the database');
+        reject(error);
+      } else {
+        let response = '';
 
-    if (req.url === '/') {
-        res.statusCode = 200;
-        res.end('Hello Holberton School!\n');
-    } else if (req.url === '/students') {
-        res.statusCode = 200;
-        countStudents('database.csv')
-            .then(() => {
-                res.end('This is the list of our students\n');
-            })
-            .catch((error) => {
-                res.statusCode = 500;
-                res.end(error.message + '\n');
-            });
-    } else {
-        res.statusCode = 404;
-        res.end('404 Not Found\n');
-    }
-});
+        const lines = data.split('\n').filter((line) => line !== '').slice(1);
+        const items = lines.map((line) => line.split(','));
 
-const PORT = 1245;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+        response += `Number of students: ${items.length}`;
+
+        const studentsByFields = {};
+        items.forEach((item) => {
+          const firstName = item[0];
+          const field = item[3];
+
+          if (!studentsByFields[field]) {
+            studentsByFields[field] = [firstName];
+          } else {
+            studentsByFields[field].push(firstName);
+          }
+        });
+
+        for (const field in studentsByFields) {
+          if (Object.hasOwnProperty.call(studentsByFields, field)) {
+            const names = studentsByFields[field].join(', ');
+            const count = studentsByFields[field].length;
+            response += `\nNumber of students in ${field}: ${count}. List: ${names}`;
+          }
+        }
+
+        resolve(response);
+      }
+    }));
+  });
+}
+
+const app = createServer((req, res) => {
+  if (req.url === '/') {
+    res.end('Hello Holberton School!');
+  } else if (req.url === '/students') {
+    res.write('');
+    writeStudents(process.argv[2])
+      .then((data) => res.end(`This is the list of our students\n${data}`))
+      .catch((error) => {
+        res.end(error.stack);
+      });
+  }
+}).listen(1245);
 
 module.exports = app;
-
