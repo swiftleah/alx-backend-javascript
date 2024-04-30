@@ -1,7 +1,7 @@
 /**
  * displays message on STDOUT
  */
-function displayMessage(message) {
+const displayMessage = (message) => {
 	console.log(message)
 }
 
