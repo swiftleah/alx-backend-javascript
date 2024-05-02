@@ -3,7 +3,6 @@ const expect = chai.expect;
 const calculateNumber = require('./1-calcul');
 
 describe('calculateNumber tests', () => {
-<<<<<<< HEAD
 	describe('type == SUM', () => {
 		it('rounded positive', () => {
 			assert.strictEqual(calculateNumber('SUM', 2, 3), 5);
@@ -85,7 +84,6 @@ describe('calculateNumber tests', () => {
 		});
 
 	});
-=======
     describe('type == SUM', () => {
         it('rounded positive', () => {
             expect(calculateNumber('SUM', 2, 3)).to.equal(5);
@@ -165,5 +163,4 @@ describe('calculateNumber tests', () => {
             expect(calculateNumber('DIVIDE', 7, 0)).to.equal('Error');
         });
     });
->>>>>>> d8705b07aac778576c2b016a1eb783a5c62baec6
 });
