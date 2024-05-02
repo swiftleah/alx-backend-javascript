@@ -54,6 +54,7 @@ describe('calculateNumber tests', () => {
 		});
 
 	});
+	describe('type == DIVIDE', () => {
 		it('rounded positive', () => {
     		assert.strictEqual(calculateNumber('DIVIDE', 6, 3), 2);
 		});
@@ -71,7 +72,7 @@ describe('calculateNumber tests', () => {
 		});
 		
 		it('non-rounded negative', () => {
-		    assert.strictEqual(calculateNumber('DIVIDE', -6.8, -3.5), 2);
+		    assert.strictEqual(calculateNumber('DIVIDE', -6.5, -3.5), 2);
 		});
 		
 		it('non-rounded negative and positive', () => {
@@ -82,4 +83,5 @@ describe('calculateNumber tests', () => {
 		    assert.strictEqual(calculateNumber('DIVIDE', 7, 0), 'Error');
 		});
 
+	});
 });
