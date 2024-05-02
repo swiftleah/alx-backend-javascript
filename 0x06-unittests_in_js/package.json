@@ -1,15 +1,18 @@
 {
-  "name": "your-package-name",
+  "name": "task_0",
   "version": "1.0.0",
-  "description": "Description of your package",
-  "main": "index.js",
+  "description": "Mocha example with assert",
+  "main": "0-calcul.js",
   "scripts": {
-    "test": "mocha 0-calcul.test.js"
-  },
-  "devDependencies": {
-    "mocha": "^9.1.3"
+    "test": "mocha"
   },
   "dependencies": {
-    "chai": "^5.1.0"
-  }
+    "assert": "^2.1.0"
+  },
+  "devDependencies": {
+    "sinon": "^17.0.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
