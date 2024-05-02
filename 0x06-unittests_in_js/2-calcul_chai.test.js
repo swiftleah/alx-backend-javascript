@@ -71,7 +71,7 @@ describe('calculateNumber tests', () => {
         });
 
         it('non-rounded negative', () => {
-            expect(calculateNumber('DIVIDE', -6.8, -3.5)).to.equal(2);
+            expect(calculateNumber('DIVIDE', -5.8, -3.5)).to.equal(2);
         });
 
         it('non-rounded negative and positive', () => {

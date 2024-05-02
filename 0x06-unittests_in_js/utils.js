@@ -14,6 +14,7 @@ const Utils = {
 			}
 			return roundeda/roundedb
 		}
+  }
 };
 
-module.exports = calculateNumber
+module.exports = Utils;
