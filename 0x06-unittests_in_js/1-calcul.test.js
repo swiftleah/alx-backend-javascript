@@ -54,4 +54,32 @@ describe('calculateNumber tests', () => {
 		});
 
 	});
+		it('rounded positive', () => {
+    		assert.strictEqual(calculateNumber('DIVIDE', 6, 3), 2);
+		});
+
+		it('rounded negative', () => {
+    		assert.strictEqual(calculateNumber('DIVIDE', -6, -3), 2);
+		});
+
+		it('rounded positive and negative', () => {
+    		assert.strictEqual(calculateNumber('DIVIDE', 6, -3), -2);
+		});
+
+		it('non-rounded positive', () => {
+		    assert.strictEqual(calculateNumber('DIVIDE', 6.3, 3.2), 2);
+		});
+		
+		it('non-rounded negative', () => {
+		    assert.strictEqual(calculateNumber('DIVIDE', -6.8, -3.5), 2);
+		});
+		
+		it('non-rounded negative and positive', () => {
+		    assert.strictEqual(calculateNumber('DIVIDE', 5.5, -3.5), -2);
+		});
+		
+		it('division by zero', () => {
+		    assert.strictEqual(calculateNumber('DIVIDE', 7, 0), 'Error');
+		});
+
 });
